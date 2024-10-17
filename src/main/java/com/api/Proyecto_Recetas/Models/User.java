@@ -1,18 +1,28 @@
 package com.api.Proyecto_Recetas.Models;
-
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-@Entity
-@Table(name="user")
-public class User {
+import java.util.List;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Entity
+    @Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = "username")})
+    public class User {
 
-    private String username;
-    private String password;
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
 
+        @Column(nullable = false, unique = true) // Hace que el username sea único
+        private String username;
+
+        private String password;
+
+        // Relación One-to-Many con Receta
+        @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+        private List<Receta> recetas;
+
+
+    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -35,5 +45,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Receta> getRecetas() {
+        return recetas;
+    }
+
+    public void setRecetas(List<Receta> recetas) {
+        this.recetas = recetas;
     }
 }

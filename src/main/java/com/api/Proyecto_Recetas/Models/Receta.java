@@ -1,14 +1,12 @@
 package com.api.Proyecto_Recetas.Models;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Entity
 @Table(name="receta")
-
 public class Receta {
 
     @Id
@@ -21,9 +19,17 @@ public class Receta {
     private String imagen;
     private boolean favorita;
 
+    // Relación One-to-Many con Ingrediente
     @OneToMany(mappedBy = "receta", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ingrediente> ingredientes = new ArrayList<>();
 
+    // Relación Many-to-One conGVHV BCX User
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference // Evita la recursión infinita en JSON
+    private User user;
+
+    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -70,5 +76,13 @@ public class Receta {
 
     public void setIngredientes(List<Ingrediente> ingredientes) {
         this.ingredientes = ingredientes;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
