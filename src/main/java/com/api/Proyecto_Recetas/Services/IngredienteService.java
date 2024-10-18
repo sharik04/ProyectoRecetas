@@ -1,12 +1,13 @@
 package com.api.Proyecto_Recetas.Services;
 
 
-import com.api.Proyecto_Recetas.Models.Ingrediente;
-import com.api.Proyecto_Recetas.Repositories.IngredienteRepository;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.api.Proyecto_Recetas.Models.Ingrediente;
+import com.api.Proyecto_Recetas.Repositories.IngredienteRepository;
 
 @Service
 public class IngredienteService {
@@ -26,6 +27,10 @@ public class IngredienteService {
         return ingredienteRepository.findById(id).orElse(null);
     }
 
+    public Ingrediente getIngredienteByName(String nombre) {
+        return ingredienteRepository.findByNombre(nombre).orElse(null);
+    }
+
     public void deleteIngrediente(Long id) {
         ingredienteRepository.deleteById(id);
     }
@@ -36,7 +41,7 @@ public class IngredienteService {
             existingIngrediente.setNombre(ingrediente.getNombre());
             return ingredienteRepository.save(existingIngrediente);
         }
-        return null; // O maneja el caso donde no se encontró el ingrediente
+        return null;
     }
 
 }

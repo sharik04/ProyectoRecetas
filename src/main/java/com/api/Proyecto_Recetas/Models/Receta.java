@@ -1,15 +1,27 @@
 package com.api.Proyecto_Recetas.Models;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 
 @Entity
-@Table(name="receta")
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Receta {
 
 
@@ -20,73 +32,49 @@ public class Receta {
     private String nombre;
 
     private String pasos;
-    private String imagen;
+    private String imagenUrl;
     private boolean favorita;
+    private String tiempo;
 
 
-    @OneToMany(mappedBy = "receta", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ingrediente> ingredientes = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "receta")
+    private List<IngredienteXReceta> ingredientes = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "user_id") // Nombre de la columna en la tabla receta que referenciará al usuario
-    @JsonBackReference
-    private User user;
+    private Usuario user;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
+    public Receta(String nombre, String pasos, String imagenUrl, boolean favorita, String tiempo,
+            List<IngredienteXReceta> ingredientes, Usuario user) {
         this.nombre = nombre;
-    }
-
-    public String getPasos() {
-        return pasos;
-    }
-
-    public void setPasos(String pasos) {
         this.pasos = pasos;
-    }
-
-    public String getImagen() {
-        return imagen;
-    }
-
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
-    }
-
-    public boolean isFavorita() {
-        return favorita;
-    }
-
-    public void setFavorita(boolean favorita) {
+        this.imagenUrl = imagenUrl;
         this.favorita = favorita;
-    }
-
-    public List<Ingrediente> getIngredientes() {
-        return ingredientes;
-    }
-
-    public void setIngredientes(List<Ingrediente> ingredientes) {
+        this.tiempo = tiempo;
         this.ingredientes = ingredientes;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
         this.user = user;
     }
+
+    public Receta(String nombre, String pasos, String imagenUrl, boolean favorita, String tiempo) {
+        this.nombre = nombre;
+        this.pasos = pasos;
+        this.imagenUrl = imagenUrl;
+        this.favorita = favorita;
+        this.tiempo = tiempo;
+    }
+
+    public Receta(String nombre, String pasos, String imagenUrl, boolean favorita, String tiempo, Usuario user) {
+        this.nombre = nombre;
+        this.pasos = pasos;
+        this.imagenUrl = imagenUrl;
+        this.favorita = favorita;
+        this.tiempo = tiempo;
+        this.user = user;
+    }
+
+    
+
+    
 }
 
 

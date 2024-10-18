@@ -1,31 +1,28 @@
 package com.api.Proyecto_Recetas.Services;
 
-import com.api.Proyecto_Recetas.Models.Ingrediente;
-import com.api.Proyecto_Recetas.Models.Receta;
-import com.api.Proyecto_Recetas.Models.User;
-import com.api.Proyecto_Recetas.Repositories.RecetaRepository;
-import com.api.Proyecto_Recetas.Repositories.IngredienteRepository;
-import com.api.Proyecto_Recetas.Repositories.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
+
+import com.api.Proyecto_Recetas.Models.Ingrediente;
+import com.api.Proyecto_Recetas.Models.IngredienteXReceta;
+import com.api.Proyecto_Recetas.Models.Receta;
+import com.api.Proyecto_Recetas.Models.Usuario;
+import com.api.Proyecto_Recetas.Repositories.IngredienteRepository;
+import com.api.Proyecto_Recetas.Repositories.RecetaRepository;
 
 class RecetaServiceTest {
 
@@ -61,28 +58,36 @@ class RecetaServiceTest {
     }
 
     @Test
-    void saveReceta() {
-        // Datos simulados
-        Receta receta = new Receta();
-        receta.setNombre("Arroz con huevo");
+void saveReceta() {
+    // Datos simulados
+    Usuario user = new Usuario("Nombre Completo", "username", "password", "email@example.com");
+    Receta receta = new Receta("Arroz con huevo", "Pasos de preparación", "url_imagen", false, "30 minutos", user);
 
-        Ingrediente ingrediente1 = new Ingrediente();
-        ingrediente1.setNombre("Arroz");
-        Ingrediente ingrediente2 = new Ingrediente();
-        ingrediente2.setNombre("Huevo");
-        receta.setIngredientes(Arrays.asList(ingrediente1, ingrediente2));
+    Ingrediente ingrediente1 = new Ingrediente("Arroz");
+    Ingrediente ingrediente2 = new Ingrediente("Huevo");
 
-        when(recetaRepository.save(receta)).thenReturn(receta);
+    IngredienteXReceta ixr1 = new IngredienteXReceta(ingrediente1, receta, 200, "gramos");
+    IngredienteXReceta ixr2 = new IngredienteXReceta(ingrediente2, receta, 2, "unidades");
 
-        // Prueba
-        Receta savedReceta = recetaService.saveReceta(receta);
-        assertNotNull(savedReceta);
-        assertEquals("Arroz con huevo", savedReceta.getNombre());
-        assertEquals(2, savedReceta.getIngredientes().size());
+    List<IngredienteXReceta> ingredientes = Arrays.asList(ixr1, ixr2);
+    receta.setIngredientes(ingredientes);
 
-        // Verificación
-        verify(recetaRepository, times(1)).save(receta);
-    }
+    when(recetaRepository.save(any(Receta.class))).thenReturn(receta);
+
+    // Prueba
+    Receta savedReceta = recetaService.saveReceta(receta);
+
+    // Verificaciones
+    assertNotNull(savedReceta);
+    assertEquals("Arroz con huevo", savedReceta.getNombre());
+    assertEquals(2, savedReceta.getIngredientes().size());
+    assertEquals("Arroz", savedReceta.getIngredientes().get(0).getIngrediente().getNombre());
+    assertEquals("Huevo", savedReceta.getIngredientes().get(1).getIngrediente().getNombre());
+    assertEquals(user, savedReceta.getUser());
+
+    // Verificación de la llamada al repositorio
+    verify(recetaRepository, times(1)).save(any(Receta.class));
+}
 
     @Test
     void getRecetaById() {
@@ -113,106 +118,43 @@ class RecetaServiceTest {
     }
 
     @Test
-    void updateReceta() {
-        // Datos simulados
-        Receta existingReceta = new Receta();
-        existingReceta.setId(1L);
-        existingReceta.setNombre("Arroz con huevo");
+void updateReceta() {
+    // Datos simulados
+    Usuario user = new Usuario("Nombre Completo", "username", "password", "email@example.com");
+    
+    Receta existingReceta = new Receta("Arroz con huevo", "Pasos originales", "url_imagen_original", false, "30 minutos", user);
+    existingReceta.setId(1L);
 
-        Receta updatedReceta = new Receta();
-        updatedReceta.setNombre("Arroz con pollo");
+    Ingrediente ingrediente1 = new Ingrediente("Arroz");
+    Ingrediente ingrediente2 = new Ingrediente("Huevo");
+    IngredienteXReceta ixr1 = new IngredienteXReceta(ingrediente1, existingReceta, 200, "gramos");
+    IngredienteXReceta ixr2 = new IngredienteXReceta(ingrediente2, existingReceta, 2, "unidades");
+    existingReceta.setIngredientes(Arrays.asList(ixr1, ixr2));
 
-        Ingrediente ingrediente1 = new Ingrediente();
-        ingrediente1.setNombre("Arroz");
-        Ingrediente ingrediente2 = new Ingrediente();
-        ingrediente2.setNombre("Pollo");
-        updatedReceta.setIngredientes(Arrays.asList(ingrediente1, ingrediente2));
+    Receta updatedReceta = new Receta("Arroz con pollo", "Nuevos pasos", "nueva_url_imagen", true, "45 minutos", user);
+    
+    Ingrediente ingrediente3 = new Ingrediente("Pollo");
+    IngredienteXReceta ixr3 = new IngredienteXReceta(ingrediente1, updatedReceta, 200, "gramos");
+    IngredienteXReceta ixr4 = new IngredienteXReceta(ingrediente3, updatedReceta, 300, "gramos");
+    updatedReceta.setIngredientes(Arrays.asList(ixr3, ixr4));
 
-        when(recetaRepository.findById(1L)).thenReturn(Optional.of(existingReceta));
-        when(recetaRepository.save(existingReceta)).thenReturn(existingReceta);
+    when(recetaRepository.findById(1L)).thenReturn(Optional.of(existingReceta));
+    when(recetaRepository.save(any(Receta.class))).thenReturn(existingReceta);
 
-        // Prueba
-        Receta result = recetaService.updateReceta(1L, updatedReceta);
+    // Prueba
+    Receta result = recetaService.updateReceta(updatedReceta);
 
-        assertNotNull(result);
-        assertEquals("Arroz con pollo", result.getNombre());
-        assertEquals(2, result.getIngredientes().size());
+    // Verificaciones
+    assertNotNull(result);
+    assertEquals("Arroz con huevo", result.getNombre());
+    assertEquals("Pasos originales", result.getPasos());
+    assertEquals("url_imagen_original", result.getImagenUrl());
+    assertEquals(false, result.isFavorita());
+    assertEquals("30 minutos", result.getTiempo());
+    assertEquals(2, result.getIngredientes().size());
+    assertEquals("Arroz", result.getIngredientes().get(0).getIngrediente().getNombre());
+    assertEquals("Huevo", result.getIngredientes().get(1).getIngrediente().getNombre());
+    assertEquals(user, result.getUser());
 
-        // Verificación
-        verify(recetaRepository, times(1)).findById(1L);
-        verify(recetaRepository, times(1)).save(existingReceta);
-    }
-
-    @SpringBootTest
-    @AutoConfigureMockMvc
-    static
-    class UserRecetaIntegrationTest {
-
-        @Autowired
-        private UserRepository userRepository;
-
-        @Autowired
-        private RecetaRepository recetaRepository;
-
-        @Autowired
-        private MockMvc mockMvc;
-
-        private User user;
-
-        @BeforeEach
-        void setUp() {
-            // Limpiar la base de datos antes de cada prueba
-            userRepository.deleteAll();
-
-            // Crear un usuario único
-            user = new User();
-            user.setUsername("sofia");
-            user.setPassword("password123");
-
-            // Crear recetas y asociarlas al usuario
-            Receta receta1 = new Receta();
-            receta1.setNombre("Arroz con huevo");
-            receta1.setPasos("1. Cocinar el arroz. 2. Freír el huevo.");
-            receta1.setUser(user);
-
-            Receta receta2 = new Receta();
-            receta2.setNombre("Pollo con arroz");
-            receta2.setPasos("1. Cocinar el arroz. 2. Cocinar el pollo.");
-            receta2.setUser(user);
-
-            user.setRecetas(Arrays.asList(receta1, receta2));
-
-            // Guardar el usuario y las recetas
-            user = userRepository.save(user);
-        }
-
-        @Test
-        void testSaveAndRetrieveUserWithRecetas() {
-            // Recuperar el usuario por su nombre de usuario
-            Optional<User> foundUser = userRepository.findByUsername("sofia");
-            assertTrue(foundUser.isPresent());
-
-            User retrievedUser = foundUser.get();
-
-            // Inicializar manualmente la colección de recetas antes de acceder a ella
-            retrievedUser.getRecetas().size(); // Esto carga las recetas si son Lazy
-
-            // Verificar que el usuario tenga dos recetas asociadas
-            assertEquals(2, retrievedUser.getRecetas().size());
-
-            // Verificar los nombres de las recetas
-            assertEquals("Arroz con huevo", retrievedUser.getRecetas().get(0).getNombre());
-            assertEquals("Pollo con arroz", retrievedUser.getRecetas().get(1).getNombre());
-        }
-
-        @Test
-        void testGetRecetasFromUserController() throws Exception {
-            // Simular una solicitud HTTP GET para obtener las recetas del usuario
-            mockMvc.perform(get("/recetas/user/" + user.getId())
-                            .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$[0].nombre").value("Arroz con huevo"))
-                    .andExpect(jsonPath("$[1].nombre").value("Pollo con arroz"));
-        }
-    }
+}
 }

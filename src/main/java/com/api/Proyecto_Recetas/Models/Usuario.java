@@ -1,4 +1,6 @@
 package com.api.Proyecto_Recetas.Models;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,28 +15,31 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Ingrediente {
+public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nombre;
+    private String nombreCompleto;
+    private String username;
+    private String password;
+    private String email;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "ingrediente")
-    private List<IngredienteXReceta> recetas;
-
-    public Ingrediente(String nombre) {
-        this.nombre = nombre;
+    public Usuario(String nombreCompleto, String username, String password, String email) {
+        this.nombreCompleto = nombreCompleto;
+        this.username = username;
+        this.password = password;
+        this.email = email;
     }
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Receta> recetas = new ArrayList<>();
 
-    
 }

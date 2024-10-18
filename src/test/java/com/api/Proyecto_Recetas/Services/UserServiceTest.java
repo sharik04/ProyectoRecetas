@@ -1,35 +1,36 @@
 package com.api.Proyecto_Recetas.Services;
 
-import com.api.Proyecto_Recetas.Models.User;
-import com.api.Proyecto_Recetas.Repositories.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.api.Proyecto_Recetas.Models.Usuario;
+import com.api.Proyecto_Recetas.Repositories.UsuarioRepository;
+
+
 class UserServiceTest {
 
-    private UserService userService;
-    private UserRepository userRepository;
+    private UsuarioService userService;
+    private UsuarioRepository userRepository;
 
     @BeforeEach
     void setUp() {
         // Inicializamos el mock del repositorio y el servicio
-        userRepository = mock(UserRepository.class);
-        userService = new UserService();
-        userService.userRepository = userRepository;  // Injectamos el mock del repositorio
+        userRepository = mock(UsuarioRepository.class);
+        userService = new UsuarioService();
+        userService.userRepo = userRepository;  // Injectamos el mock del repositorio
     }
 
     @Test
     void getUsers() {
         // Configuramos el mock para devolver un ArrayList de usuarios
-        ArrayList<User> users = new ArrayList<>();
-        User user = new User();
+        ArrayList<Usuario> users = new ArrayList<>();
+        Usuario user = new Usuario();
         user.setId(1L);
         user.setUsername("john_doe");
         user.setPassword("password123");
@@ -38,7 +39,7 @@ class UserServiceTest {
         when(userRepository.findAll()).thenReturn(users);  // Devolvemos un ArrayList
 
         // Llamamos al método a probar
-        ArrayList<User> result = userService.getUsers();  // Esto ahora coincidirá con el tipo esperado
+        ArrayList<Usuario> result = userService.getUsers();  // Esto ahora coincidirá con el tipo esperado
 
         // Verificamos los resultados
         assertEquals(1, result.size());
@@ -48,12 +49,12 @@ class UserServiceTest {
 
     @Test
     void saveUser() {
-        User user = new User();
+        Usuario user = new Usuario();
         user.setUsername("jane_doe");
         user.setPassword("password123");
 
         // Simulamos el guardado del usuario
-        User savedUser = new User();
+        Usuario savedUser = new Usuario();
         savedUser.setId(2L);
         savedUser.setUsername("jane_doe");
         savedUser.setPassword("password123");
@@ -61,7 +62,7 @@ class UserServiceTest {
         when(userRepository.save(user)).thenReturn(savedUser);
 
         // Llamamos al método a probar
-        User result = userService.saveUser(user);
+        Usuario result = userService.saveUser(user);
 
         // Verificamos que el usuario se haya guardado correctamente
         assertNotNull(result.getId());
@@ -72,7 +73,7 @@ class UserServiceTest {
     @Test
     void getUserById() {
         Long userId = 1L;
-        User user = new User();
+        Usuario user = new Usuario();
         user.setId(userId);
         user.setUsername("john_doe");
         user.setPassword("password123");
@@ -81,7 +82,7 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
         // Llamamos al método a probar
-        Optional<User> result = userService.getUserById(userId);
+        Optional<Usuario> result = userService.getUserById(userId);
 
         // Verificamos los resultados
         assertTrue(result.isPresent());
@@ -91,12 +92,12 @@ class UserServiceTest {
     @Test
     void updateByID() {
         Long userId = 1L;
-        User existingUser = new User();
+        Usuario existingUser = new Usuario();
         existingUser.setId(userId);
         existingUser.setUsername("john_doe");
         existingUser.setPassword("password123");
 
-        User updatedUser = new User();
+        Usuario updatedUser = new Usuario();
         updatedUser.setUsername("john_updated");
         updatedUser.setPassword("new_password");
 
@@ -107,7 +108,7 @@ class UserServiceTest {
         // (Aquí el mock no necesita hacer nada para save() porque nunca se llama en tu UserService).
 
         // Llamamos al método a probar
-        User result = userService.updateByID(updatedUser, userId);
+        Usuario result = userService.updateByID(updatedUser, userId);
 
         // Verificamos que el usuario fue actualizado en memoria, pero no se llama a save()
         assertEquals("john_updated", result.getUsername());
@@ -137,7 +138,7 @@ class UserServiceTest {
     @Test
     void getUserByUsername() {
         String username = "john_doe";
-        User user = new User();
+        Usuario user = new Usuario();
         user.setId(1L);
         user.setUsername(username);
         user.setPassword("password123");
@@ -146,7 +147,7 @@ class UserServiceTest {
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
         // Llamamos al método a probar
-        Optional<User> result = userService.getUserByUsername(username);
+        Optional<Usuario> result = userService.getUserByUsername(username);
 
         // Verificamos que se haya encontrado el usuario
         assertTrue(result.isPresent());

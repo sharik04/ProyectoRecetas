@@ -1,47 +1,44 @@
 package com.api.Proyecto_Recetas.Controllers;
 
 
-import com.api.Proyecto_Recetas.Models.Receta;
-import com.api.Proyecto_Recetas.Models.User;
-import com.api.Proyecto_Recetas.Services.RecetaService;
-import com.api.Proyecto_Recetas.Services.UserService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-//Indica que esta clase es un controlador REST,
-// lo que significa que manejará las peticiones HTTP y devolverá respuestas en formato JSON
+import com.api.Proyecto_Recetas.Models.IngredienteXReceta;
+import com.api.Proyecto_Recetas.Models.Receta;
+import com.api.Proyecto_Recetas.Models.RequestEntities.NewRecetaRequest;
+import com.api.Proyecto_Recetas.Services.IngredienteXRecetaService;
+import com.api.Proyecto_Recetas.Services.RecetaService;
+import com.api.Proyecto_Recetas.Services.UsuarioService;
+
 @RestController
-//Se define la ruta
 @RequestMapping("/recetas")
 
 public class RecetaController {
-    //Inyecta las dependencias
     @Autowired
     private RecetaService recetaService;
 
     @Autowired
-    private UserService userService;
-    //Se manejan las solicitudes Post mediante el userId
-    @PostMapping("/{userId}")
-    //
-    //@PathVariable Long userId: Captura el userId de la URL.
-    //@RequestBody Receta receta: Toma el cuerpo de la solicitud y lo convierte en un objeto Receta.
-    public ResponseEntity<Receta> saveReceta(@PathVariable Long userId, @RequestBody Receta receta) {
-        User user = userService.getUserById(userId).orElse(null);
-        if (user != null) {
-            receta.setUser(user);
-            Receta savedReceta = recetaService.saveReceta(receta);
-            return ResponseEntity.ok(savedReceta);
-        }
-        return ResponseEntity.notFound().build();
-    }
+    private UsuarioService userService;
+
+    @Autowired
+    private IngredienteXRecetaService repoPrueba;
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Receta>> getRecetasByUserId(@PathVariable Long userId) {
+    public List<Receta> getRecetasByUserId(@PathVariable Long userId) {
+        System.out.println(userId.toString());
         List<Receta> recetas = recetaService.getRecetasByUserId(userId);
-        return ResponseEntity.ok(recetas);
+        return recetas;
     }
 
     @GetMapping("/buscarPorNombre")
@@ -54,6 +51,18 @@ public class RecetaController {
         }
     }
 
+    @PostMapping("/crearReceta")
+    public ResponseEntity<String> crearReceta(@RequestBody NewRecetaRequest entity) {
+        if (recetaService.crearReceta(entity.getReceta(), entity.getIngredientesXReceta()) == 1) {
+            return ResponseEntity.ok("Receta creada correctamente");
+        }   
+        else {
+            return ResponseEntity.badRequest().build();
+        }
+        
+    }
+    
+
     @GetMapping("/{id}")
     public Receta getReceta(@PathVariable Long id) {
         return recetaService.getRecetaById(id);
@@ -64,15 +73,16 @@ public class RecetaController {
         recetaService.deleteReceta(id);
     }
 
-    @PutMapping("/{id}")
-    public Receta updateReceta(@PathVariable Long id, @RequestBody Receta receta) {
-        return recetaService.updateReceta(id, receta);
-    }
-
     @GetMapping
     public ResponseEntity<List<Receta>> getAllRecetas() {
         List<Receta> recetas = recetaService.getAllRecetas();
         return ResponseEntity.ok(recetas);
     }
+
+    @GetMapping("/prueba")
+    public List<IngredienteXReceta> getMethodName() {
+        return repoPrueba.getAllIngredienteXReceta();
+    }
+    
 
 }
