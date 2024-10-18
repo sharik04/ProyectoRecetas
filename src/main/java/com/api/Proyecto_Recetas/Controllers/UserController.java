@@ -59,7 +59,15 @@ public class UserController {
       }
    }
 
-
+   @GetMapping("/{id}/recetas")
+   public ResponseEntity<?> getRecetasByUserId(@PathVariable("id") Long id) {
+      Optional<User> user = userService.getUserById(id);
+      if (user.isPresent()) {
+         return ResponseEntity.ok(user.get().getRecetas()); // Devolver las recetas del usuario
+      } else {
+         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+      }
+   }
 
 
 

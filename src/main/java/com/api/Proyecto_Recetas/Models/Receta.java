@@ -29,6 +29,8 @@ public class Receta {
 
     @ManyToOne
     @JoinColumn(name = "user_id") // Nombre de la columna en la tabla receta que referenciará al usuario
+
+    
     @JsonBackReference
     private User user;
 
