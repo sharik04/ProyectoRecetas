@@ -14,4 +14,7 @@ public interface RecetaRepository extends JpaRepository<Receta, Long> {
     Optional<Receta>findByNombre(String nombre);
     @Query("SELECT r FROM Receta r WHERE r.nombre LIKE %?1%")
     List<Receta> getSimilarNombre(String nombre);
+
+    @Query("SELECT r FROM Receta r WHERE r.favorita = true AND r.user.id = ?1")
+    List<Receta> findFavoritas(Long id);
 }

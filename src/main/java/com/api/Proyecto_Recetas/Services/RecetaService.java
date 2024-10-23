@@ -68,6 +68,10 @@ public class RecetaService {
         return repoReceta.findByUserId(userId);
     }
 
+    public List<Receta> getRecetasFavoritasByUserId(Long userId) {
+        return repoReceta.findFavoritas(userId);
+    }
+
     public List<Receta> getRecetasByNombre(String nombre) {
         List<Receta> receta = repoReceta.getSimilarNombre(nombre);
         return receta;

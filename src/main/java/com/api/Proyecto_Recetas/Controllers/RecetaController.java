@@ -28,8 +28,13 @@ public class RecetaController {
 
     @GetMapping("/user/{userId}")
     public List<Receta> getRecetasByUserId(@PathVariable Long userId) {
-        System.out.println(userId.toString());
         List<Receta> recetas = recetaService.getRecetasByUserId(userId);
+        return recetas;
+    }
+
+    @GetMapping("/userFavorites/{userId}")
+    public List<Receta> getRecetasFavoritasByUserId(@PathVariable Long userId) {
+        List<Receta> recetas = recetaService.getRecetasFavoritasByUserId(userId);
         return recetas;
     }
 
