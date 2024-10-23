@@ -1,7 +1,6 @@
 package com.api.Proyecto_Recetas.Services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,9 +68,9 @@ public class RecetaService {
         return repoReceta.findByUserId(userId);
     }
 
-    public Receta getRecetaByNombre(String nombre) {
-        Optional<Receta> receta = repoReceta.findByNombre(nombre);
-        return receta.orElse(null);
+    public List<Receta> getRecetasByNombre(String nombre) {
+        List<Receta> receta = repoReceta.getSimilarNombre(nombre);
+        return receta;
     }
 
 }
