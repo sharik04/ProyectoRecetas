@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.Proyecto_Recetas.Models.IngredienteXReceta;
@@ -41,13 +40,13 @@ public class RecetaController {
         return recetas;
     }
 
-    @GetMapping("/buscarPorNombre")
-    public ResponseEntity<Receta> getRecetaByNombre(@RequestParam String nombre) {
-        Receta receta = recetaService.getRecetaByNombre(nombre);
-        if (receta != null) {
-            return ResponseEntity.ok(receta);
+    @GetMapping("/buscarPorNombre/{nombre}")
+    public List<Receta> getRecetaByNombre(@PathVariable String nombre) {
+        List<Receta> recetas = recetaService.getRecetasByNombre(nombre);
+        if (recetas != null) {
+            return recetas;
         } else {
-            return ResponseEntity.notFound().build();
+            return null;
         }
     }
 
