@@ -9,16 +9,15 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.api.Proyecto_Recetas.Models.IngredienteXReceta;
 import com.api.Proyecto_Recetas.Models.Receta;
 import com.api.Proyecto_Recetas.Models.RequestEntities.NewRecetaRequest;
-import com.api.Proyecto_Recetas.Services.IngredienteXRecetaService;
 import com.api.Proyecto_Recetas.Services.RecetaService;
-import com.api.Proyecto_Recetas.Services.UsuarioService;
+
 
 @RestController
 @RequestMapping("/recetas")
@@ -26,12 +25,6 @@ import com.api.Proyecto_Recetas.Services.UsuarioService;
 public class RecetaController {
     @Autowired
     private RecetaService recetaService;
-
-    @Autowired
-    private UsuarioService userService;
-
-    @Autowired
-    private IngredienteXRecetaService repoPrueba;
 
     @GetMapping("/user/{userId}")
     public List<Receta> getRecetasByUserId(@PathVariable Long userId) {
@@ -78,9 +71,9 @@ public class RecetaController {
         return ResponseEntity.ok(recetas);
     }
 
-    @GetMapping("/prueba")
-    public List<IngredienteXReceta> getMethodName() {
-        return repoPrueba.getAllIngredienteXReceta();
+    @PutMapping("/toggleFavorita/{id}")
+    public void toggleFavorita(@PathVariable Long id) {
+        recetaService.toggleFavorita(id);
     }
     
 

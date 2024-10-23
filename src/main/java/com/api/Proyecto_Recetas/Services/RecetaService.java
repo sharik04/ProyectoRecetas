@@ -73,4 +73,12 @@ public class RecetaService {
         return receta;
     }
 
+    public void toggleFavorita(Long id) {
+        Receta receta = repoReceta.findById(id).orElse(null);    
+        if (receta != null) {
+            receta.setFavorita(!receta.isFavorita());
+            repoReceta.save(receta);
+        }
+    }
+
 }
