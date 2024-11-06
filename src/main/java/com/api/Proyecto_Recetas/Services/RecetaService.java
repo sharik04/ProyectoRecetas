@@ -101,4 +101,8 @@ public class RecetaService {
         }
         return null; // O lanzar una excepción si no se encuentra la receta o el usuario no tiene permiso
     }
+
+    public List<Receta> getAllRecetas() {
+        return recetaRepository.findAll();  // Suponiendo que tienes un repositorio que extiende JpaRepository
+    }
 }

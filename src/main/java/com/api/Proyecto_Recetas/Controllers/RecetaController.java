@@ -16,6 +16,13 @@ public class RecetaController {
     @Autowired
     private RecetaService recetaService;
 
+    // Obtener todas las recetas
+    @GetMapping()
+    public ResponseEntity<List<Receta>> getAllRecetas() {
+        List<Receta> recetas = recetaService.getAllRecetas();
+        return new ResponseEntity<>(recetas, HttpStatus.OK);
+    }
+
     // Obtener todas las recetas de un usuario específico
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Receta>> getRecetasByUserId(@PathVariable Long userId) {
@@ -62,5 +69,7 @@ public class RecetaController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);  // 404 Not Found si no se encuentra la receta
         }
     }
+
+
 }
 
