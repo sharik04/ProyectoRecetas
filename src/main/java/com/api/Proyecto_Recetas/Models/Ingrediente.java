@@ -1,8 +1,7 @@
 package com.api.Proyecto_Recetas.Models;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 
 @Entity
 public class Ingrediente {
@@ -13,12 +12,7 @@ public class Ingrediente {
 
     private String nombre;
 
-    @ManyToOne
-    @JoinColumn(name = "receta_id")
-    @JsonIgnore
-    private Receta receta;
-
-
+    // Getters y setters
     public Long getId() {
         return id;
     }
@@ -33,13 +27,5 @@ public class Ingrediente {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public Receta getReceta() {
-        return receta;
-    }
-
-    public void setReceta(Receta receta) {
-        this.receta = receta;
     }
 }

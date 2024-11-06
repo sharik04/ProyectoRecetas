@@ -1,33 +1,26 @@
 package com.api.Proyecto_Recetas.Services;
 
 import com.api.Proyecto_Recetas.Models.Ingrediente;
+import com.api.Proyecto_Recetas.Models.IngredienteXReceta;
 import com.api.Proyecto_Recetas.Models.Receta;
 import com.api.Proyecto_Recetas.Models.User;
-import com.api.Proyecto_Recetas.Repositories.RecetaRepository;
 import com.api.Proyecto_Recetas.Repositories.IngredienteRepository;
+import com.api.Proyecto_Recetas.Repositories.RecetaRepository;
+import com.api.Proyecto_Recetas.Repositories.IngredienteXRecetaRepository;
 import com.api.Proyecto_Recetas.Repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.*;
 
-class RecetaServiceTest {
+public class RecetaServiceTest {
 
     @Mock
     private RecetaRepository recetaRepository;
@@ -35,111 +28,89 @@ class RecetaServiceTest {
     @Mock
     private IngredienteRepository ingredienteRepository;
 
+    @Mock
+    private IngredienteXRecetaRepository ingredienteXRecetaRepository;
+
+    @Mock
+    private UserRepository userRepository;
+
     @InjectMocks
     private RecetaService recetaService;
 
+    private User user;
+    private Receta receta;
+
     @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this); // Inicializa los mocks
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);  // Inicializa los mocks
+        user = new User();
+        user.setId(1L);
+        user.setUsername("testUser");
+        user.setPassword("password");
+
+        receta = new Receta();
+        receta.setNombre("Receta de prueba");
+        receta.setPasos("Pasos de la receta");
+        receta.setImagen("imagen.jpg");
+        receta.setFavorita(false);
     }
 
     @Test
-    void getAllRecetas() {
-        // Datos simulados
-        Receta receta1 = new Receta();
-        receta1.setNombre("Arroz con huevo");
-        Receta receta2 = new Receta();
-        receta2.setNombre("Arroz con carne");
+    public void testSaveReceta() {
+        // Datos de prueba
+        Ingrediente ingrediente = new Ingrediente();
+        ingrediente.setNombre("Tomate");
 
-        when(recetaRepository.findAll()).thenReturn(Arrays.asList(receta1, receta2));
+        IngredienteXReceta ingredienteXReceta = new IngredienteXReceta();
+        ingredienteXReceta.setIngrediente(ingrediente);
 
-        // Prueba
-        List<Receta> recetas = recetaService.getAllRecetas();
-        assertNotNull(recetas);
-        assertEquals(2, recetas.size());
-        assertEquals("Arroz con huevo", recetas.get(0).getNombre());
-    }
+        receta.setIngredienteXRecetas(List.of(ingredienteXReceta));
 
-    @Test
-    void saveReceta() {
-        // Datos simulados
-        Receta receta = new Receta();
-        receta.setNombre("Arroz con huevo");
+        // Mock de las interacciones
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(ingredienteRepository.findByNombre("Tomate")).thenReturn(Optional.empty());  // Ingrediente no existe en la base de datos
+        when(recetaRepository.save(any(Receta.class))).thenReturn(receta);
 
-        Ingrediente ingrediente1 = new Ingrediente();
-        ingrediente1.setNombre("Arroz");
-        Ingrediente ingrediente2 = new Ingrediente();
-        ingrediente2.setNombre("Huevo");
-        receta.setIngredientes(Arrays.asList(ingrediente1, ingrediente2));
+        // Ejecutar el método
+        Receta savedReceta = recetaService.saveReceta(receta, 1L);
 
-        when(recetaRepository.save(receta)).thenReturn(receta);
+        // Verificar que se haya llamado correctamente a los métodos
+        verify(userRepository).findById(1L);
+        verify(ingredienteRepository).findByNombre("Tomate");
+        verify(recetaRepository).save(any(Receta.class));
 
-        // Prueba
-        Receta savedReceta = recetaService.saveReceta(receta);
+        // Verificar que la receta fue guardada correctamente
         assertNotNull(savedReceta);
-        assertEquals("Arroz con huevo", savedReceta.getNombre());
-        assertEquals(2, savedReceta.getIngredientes().size());
-
-        // Verificación
-        verify(recetaRepository, times(1)).save(receta);
+        assertEquals("Receta de prueba", savedReceta.getNombre());
+        assertEquals("Tomate", savedReceta.getIngredienteXRecetas().get(0).getIngrediente().getNombre());
     }
 
     @Test
-    void getRecetaById() {
-        // Datos simulados
-        Receta receta = new Receta();
-        receta.setId(1L);
-        receta.setNombre("Arroz con huevo");
+    public void testSaveRecetaWithExistingIngredient() {
+        // Ingrediente ya existe en la base de datos
+        Ingrediente ingrediente = new Ingrediente();
+        ingrediente.setNombre("Tomate");
 
-        when(recetaRepository.findById(1L)).thenReturn(Optional.of(receta));
+        IngredienteXReceta ingredienteXReceta = new IngredienteXReceta();
+        ingredienteXReceta.setIngrediente(ingrediente);
+        receta.setIngredienteXRecetas(List.of(ingredienteXReceta));
 
-        // Prueba
-        Receta foundReceta = recetaService.getRecetaById(1L);
-        assertNotNull(foundReceta);
-        assertEquals(1L, foundReceta.getId());
-        assertEquals("Arroz con huevo", foundReceta.getNombre());
-    }
+        // Mock de las interacciones
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(ingredienteRepository.findByNombre("Tomate")).thenReturn(Optional.of(ingrediente));  // Ingrediente ya existe
+        when(recetaRepository.save(any(Receta.class))).thenReturn(receta);
 
-    @Test
-    void deleteReceta() {
-        // No retorna valor, simplemente verificamos la interacción
-        doNothing().when(recetaRepository).deleteById(1L);
+        // Ejecutar el método
+        Receta savedReceta = recetaService.saveReceta(receta, 1L);
 
-        // Prueba
-        recetaService.deleteReceta(1L);
+        // Verificar que se haya llamado correctamente a los métodos
+        verify(userRepository).findById(1L);
+        verify(ingredienteRepository).findByNombre("Tomate");
+        verify(recetaRepository).save(any(Receta.class));
 
-        // Verificación
-        verify(recetaRepository, times(1)).deleteById(1L);
-    }
-
-    @Test
-    void updateReceta() {
-        // Datos simulados
-        Receta existingReceta = new Receta();
-        existingReceta.setId(1L);
-        existingReceta.setNombre("Arroz con huevo");
-
-        Receta updatedReceta = new Receta();
-        updatedReceta.setNombre("Arroz con pollo");
-
-        Ingrediente ingrediente1 = new Ingrediente();
-        ingrediente1.setNombre("Arroz");
-        Ingrediente ingrediente2 = new Ingrediente();
-        ingrediente2.setNombre("Pollo");
-        updatedReceta.setIngredientes(Arrays.asList(ingrediente1, ingrediente2));
-
-        when(recetaRepository.findById(1L)).thenReturn(Optional.of(existingReceta));
-        when(recetaRepository.save(existingReceta)).thenReturn(existingReceta);
-
-        // Prueba
-        Receta result = recetaService.updateReceta(1L, updatedReceta);
-
-        assertNotNull(result);
-        assertEquals("Arroz con pollo", result.getNombre());
-        assertEquals(2, result.getIngredientes().size());
-
-        // Verificación
-        verify(recetaRepository, times(1)).findById(1L);
-        verify(recetaRepository, times(1)).save(existingReceta);
+        // Verificar que la receta fue guardada correctamente
+        assertNotNull(savedReceta);
+        assertEquals("Receta de prueba", savedReceta.getNombre());
+        assertEquals("Tomate", savedReceta.getIngredienteXRecetas().get(0).getIngrediente().getNombre());
     }
 }

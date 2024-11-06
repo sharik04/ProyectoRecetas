@@ -1,8 +1,11 @@
 package com.api.Proyecto_Recetas.Services;
 
-
 import com.api.Proyecto_Recetas.Models.Ingrediente;
+import com.api.Proyecto_Recetas.Models.IngredienteXReceta;
+import com.api.Proyecto_Recetas.Models.Receta;
 import com.api.Proyecto_Recetas.Repositories.IngredienteRepository;
+import com.api.Proyecto_Recetas.Repositories.IngredienteXRecetaRepository;
+import com.api.Proyecto_Recetas.Repositories.RecetaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +16,12 @@ public class IngredienteService {
 
     @Autowired
     private IngredienteRepository ingredienteRepository;
+
+    @Autowired
+    private IngredienteXRecetaRepository ingredienteXRecetaRepository;
+
+    @Autowired
+    private RecetaRepository recetaRepository;
 
     public List<Ingrediente> getAllIngredientes() {
         return ingredienteRepository.findAll();
@@ -36,7 +45,21 @@ public class IngredienteService {
             existingIngrediente.setNombre(ingrediente.getNombre());
             return ingredienteRepository.save(existingIngrediente);
         }
-        return null; // O maneja el caso donde no se encontró el ingrediente
+        return null;
+    }
+
+    // Método para asociar ingredientes con recetas
+    public void asociarIngredienteAReceta(Long ingredienteId, Long recetaId) {
+        Ingrediente ingrediente = ingredienteRepository.findById(ingredienteId).orElse(null);
+        Receta receta = recetaRepository.findById(recetaId).orElse(null); // Usar recetaRepository en lugar de RecetaRepository
+
+        if (ingrediente != null && receta != null) {
+            IngredienteXReceta ingredienteXReceta = new IngredienteXReceta();
+            ingredienteXReceta.setIngrediente(ingrediente);
+            ingredienteXReceta.setReceta(receta);
+            ingredienteXRecetaRepository.save(ingredienteXReceta);
+        }
     }
 
 }
+
