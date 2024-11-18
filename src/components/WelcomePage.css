@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #ffffff; /* Fondo blanco simple */
+    color: #333333; /* Color del texto gris oscuro para mejor lectura */
+    margin: 0;
+    padding: 0;
+}
+
+/* Barra Superior */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 2.5rem;
+    color: #4a624c;
+}
+
+.navbar a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #4a624c;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.navbar a:hover {
+    color: #76c893; /* Cambia el color al pasar el ratón */
+}
+
+.profile-button {
+    background-color: #6a9c78;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.profile-button:hover {
+    background-color: #76c893;
+}
+
+/* Contenedor de Recetas */
+.recetas-container {
+    padding: 30px;
+    text-align: center;
+}
+
+.recetas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.recetas-title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 2em;
+    color: #4a624c;
+}
+
+.recetas-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-button, .add-button {
+    background-color: #ffffff;
+    color: #4a624c;
+    border: 1px solid #4a624c;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-button {
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.action-button:hover, .add-button:hover {
+    background-color: #76c893;
+    color: #ffffff;
+}
+
+/* Grid de Recetas */
+.recetas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.receta-item {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.receta-item:hover {
+    transform: translateY(-5px);
+}
+
+.receta-img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.card-title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.5rem;
+    color: #4a624c;
+    margin: 15px;
+}
+
+.card-description {
+    color: #6a6a6a;
+    font-size: 0.9rem;
+    margin: 0 15px 15px 15px;
+}
+
+.receta-actions {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px;
+}
+
+.receta-icon {
+    font-size: 1.2em;
+    color: #4a624c;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.receta-icon:hover {
+    color: #76c893;
+}

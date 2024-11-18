@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #ffffff; /* Fondo blanco simple */
+    color: #333333; /* Color del texto gris oscuro para mejor lectura */
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilo del Título Principal */
+h1, h2, h3 {
+    font-family: 'Bebas Neue', cursive;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #4a624c; /* Color sutil y natural */
+    margin-bottom: 20px;
+}
+
+/* Contenedor Principal */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 60px auto; /* Espacio superior para centrar el contenedor */
+}
+
+/* Header */
+.header {
+    position: relative;
+    margin-top: 150px; /* Incrementa el margen superior para evitar que quede muy arriba */
+    padding-top: 20px; /* Ajuste para mejor visibilidad del encabezado */
+}
+
+/* Navbar Estilizado */
+.navbar {
+    background-color: #ffffff; /* Fondo blanco */
+    padding: 15px 0;
+    border-bottom: 1px solid #e0e0e0; /* Línea sutil en el fondo */
+    margin-top: 10px; /* Reduce el margen superior */
+}
+
+.navbar ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center; /* Centramos la navegación */
+    margin: 0;
+}
+
+.navbar ul li {
+    margin: 0 15px;
+}
+
+.navbar ul li a {
+    color: #4a624c; /* Color sutil y natural */
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+    font-size: 1rem;
+}
+
+.navbar ul li a:hover {
+    color: #76c893; /* Color de acento al pasar el ratón */
+}
+
+/* Cards para las Recetas */
+.card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0; /* Borde sutil */
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para el efecto flotante */
+    margin: 20px;
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.card-content {
+    padding: 15px;
+    text-align: left;
+}
+
+.card-title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.5rem;
+    color: #333333;
+    margin-bottom: 10px;
+}
+
+.card-description {
+    color: #555555; /* Texto sutilmente gris */
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.card-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-info span {
+    font-weight: 600;
+    color: #76c893; /* Color del porcentaje de popularidad */
+}
+
+/* Botón de Filtro */
+.filter-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.filter-buttons button {
+    background-color: #ffffff;
+    color: #4a624c;
+    border: 1px solid #4a624c;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-weight: 600;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-buttons button:hover {
+    background-color: #76c893;
+    color: #ffffff;
+}
+
+/* Diseño Responsivo */
+@media (max-width: 768px) {
+    .card {
+        margin: 15px 0;
+    }
+
+    .navbar ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navbar ul li {
+        margin: 10px 0;
+    }
+
+    .filter-buttons {
+        flex-direction: column;
+    }
+
+    .filter-buttons button {
+        margin-bottom: 10px;
+    }
+}

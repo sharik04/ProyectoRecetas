@@ -1,0 +1,328 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #ffffff; /* Fondo blanco simple */
+    color: #333333; /* Color del texto gris oscuro para mejor lectura */
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor Principal */
+.center-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 40px auto; /* Espacio superior para centrar el contenedor */
+    padding: 20px;
+}
+
+/* Estilo del Título Principal */
+h1, h2, h3 {
+    font-family: 'Bebas Neue', cursive;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #4a624c; /* Color sutil y natural */
+    margin-bottom: 20px;
+}
+
+/* Navbar Estilizado */
+.navbar {
+    background-color: #ffffff; /* Fondo blanco */
+    padding: 15px 0;
+    border-bottom: 1px solid #e0e0e0; /* Línea sutil en el fondo */
+}
+
+.navbar ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center; /* Centramos la navegación */
+    margin: 0;
+}
+
+.navbar ul li {
+    margin: 0 15px;
+}
+
+.navbar ul li a {
+    color: #4a624c; /* Color sutil y natural */
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+    font-size: 1rem;
+}
+
+.navbar ul li a:hover {
+    color: #76c893; /* Color de acento al pasar el ratón */
+}
+
+/* Botón del Perfil */
+.profile-button {
+    background-color: #76c893;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.profile-button:hover {
+    background-color: #4a624c;
+}
+
+/* Recetas Header */
+.recetas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.recetas-title {
+    font-size: 2em;
+    color: #4a624c;
+}
+
+/* Acciones de Recetas */
+.recetas-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-button {
+    background-color: #ffffff;
+    color: #4a624c;
+    border: 1px solid #4a624c;
+    border-radius: 15px;
+    padding: 10px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.action-button:hover {
+    background-color: #76c893;
+    color: #ffffff;
+}
+
+.add-button {
+    background-color: #76c893;
+    color: #ffffff;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-button:hover {
+    background-color: #4a624c;
+}
+
+/* Grid de Recetas */
+.recetas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.receta-item {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    position: relative;
+    transition: transform 0.3s;
+}
+
+.receta-item:hover {
+    transform: translateY(-5px);
+}
+
+.receta-emoji {
+    font-size: 2.5em;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.receta-item h3 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.5rem;
+    color: #333333;
+    margin-bottom: 10px;
+}
+
+.receta-item p {
+    font-size: 1em;
+    line-height: 1.6;
+    color: #555555; /* Texto sutilmente gris */
+}
+
+.receta-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.receta-icon {
+    font-size: 1.2em;
+    color: #4a624c;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.receta-icon:hover {
+    color: #76c893;
+}
+
+/* Diseño Responsivo */
+@media (max-width: 768px) {
+    .recetas-header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .recetas-actions {
+        flex-direction: column;
+        margin-top: 10px;
+    }
+}
+.receta-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover; /* Ajusta la imagen sin distorsionarla */
+    border-radius: 10px; /* Añade bordes redondeados si lo deseas */
+    margin-bottom: 10px; /* Espacio inferior entre la imagen y el contenido */
+}
+.search-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .search-input {
+    padding: 10px;
+    border: 1px solid #4a624c;
+    border-radius: 15px;
+    font-size: 1rem;
+    outline: none;
+  }
+  .favorita-icon {
+    font-size: 2em;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+  
+  .favorita-icon:hover {
+    transform: scale(1.2);
+  }
+  .modal {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 15px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .close-button:hover,
+  .close-button:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .view-steps-button {
+    background-color: #76c893;
+    color: #ffffff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .view-steps-button:hover {
+    background-color: #4a624c;
+  }
+  /* Modal de Edición */
+.edit-modal-content {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 20px;
+    width: 80%;
+    max-width: 600px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.edit-input {
+    padding: 12px;
+    border: 1px solid #4a624c;
+    border-radius: 10px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.save-button {
+    background-color: #4a624c;
+    color: #ffffff;
+    border: none;
+    border-radius: 15px;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.save-button:hover {
+    background-color: #76c893;
+}
+    /* Header */
+.header {
+    position: relative;
+    margin-top: 20px; /* Añadido margen superior para evitar que quede muy arriba */
+    padding-top: 20px; /* Ajuste para mejor visibilidad del encabezado */
+}
+
+

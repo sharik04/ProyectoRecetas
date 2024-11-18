@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #ffffff; /* Fondo blanco simple */
+    color: #333333; /* Color del texto gris oscuro para mejor lectura */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Contenedor Principal */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto; /* Centrado del contenedor */
+    padding: 20px;
+}
+
+/* Contenedor de Bienvenida y Login */
+.center-container {
+    width: 100%;
+    max-width: 400px;
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Estilo del Título Principal */
+h1, h2, h3 {
+    font-family: 'Bebas Neue', cursive;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #4a624c; /* Color sutil y natural */
+    margin-bottom: 20px;
+}
+
+/* Botón Principal */
+.btn-login, .btn-welcome {
+    background: linear-gradient(to right, #76c893, #4a624c);
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
+    padding: 15px 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 20px;
+}
+
+.btn-login:hover, .btn-welcome:hover {
+    background: linear-gradient(to right, #4a624c, #76c893);
+}
+
+/* Estilo del Input */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    transition: box-shadow 0.3s;
+}
+
+input:focus {
+    box-shadow: 0 0 10px rgba(118, 200, 147, 0.5);
+}
+
+/* Navbar Estilizado */
+.navbar {
+    background-color: #ffffff;
+    padding: 15px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.navbar ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center; 
+    margin: 0;
+}
+
+.navbar ul li {
+    margin: 0 15px;
+}
+
+.navbar ul li a {
+    color: #4a624c;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+    font-size: 1rem;
+}
+
+.navbar ul li a:hover {
+    color: #76c893;
+}
+
+/* Diseño Responsivo */
+@media (max-width: 768px) {
+    .center-container {
+        padding: 20px;
+    }
+
+    .navbar ul {
+        flex-direction: column;
+        padding: 10px 0;
+    }
+
+    .navbar ul li {
+        margin: 10px 0;
+    }
+}

@@ -1,0 +1,73 @@
+.ingredientes-list-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 40px auto; /* Añadir un margen superior para bajar la lista */
+    background: linear-gradient(135deg, #ffffff, #f7f9f8);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+}
+
+.title {
+    font-family: 'Bebas Neue', cursive;
+    text-align: center;
+    color: #4a624c;
+    margin-bottom: 20px;
+}
+
+.ingredientes-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ingrediente-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #ffffff;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.ingrediente-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.ingrediente-name {
+    font-weight: bold;
+    color: #4a624c;
+}
+
+.ingrediente-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-link {
+    color: #76c893;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.edit-link:hover {
+    color: #4a624c;
+}
+
+.delete-button {
+    background-color: #ff6b6b;
+    color: #ffffff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+    background-color: #ff4c4c;
+}
