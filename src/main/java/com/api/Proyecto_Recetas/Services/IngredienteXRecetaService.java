@@ -13,9 +13,9 @@ import com.api.Proyecto_Recetas.Models.Receta;
 import com.api.Proyecto_Recetas.Repositories.IngredienteRepository;
 import com.api.Proyecto_Recetas.Repositories.IngredienteXRecetaRepository;
 import com.api.Proyecto_Recetas.Repositories.RecetaRepository;
-
 @Service
 public class IngredienteXRecetaService {
+
     @Autowired
     private IngredienteXRecetaRepository repoIngredienteXReceta;
 
@@ -25,45 +25,37 @@ public class IngredienteXRecetaService {
     @Autowired
     private IngredienteRepository repoIngrediente;
 
-    //get all
+    // Obtener todos los IngredienteXReceta
     public List<IngredienteXReceta> getAllIngredienteXReceta() {
         return repoIngredienteXReceta.findAll();
     }
 
-    public Optional<List<IngredienteXReceta>> getIngredienteXRecetaById(String receta) {
-        Receta recetaBuscada = repoReceta.findByNombre(receta).orElse(null);
-        if (recetaBuscada != null) {
-            return repoIngredienteXReceta.findByReceta(recetaBuscada);
-        } else {
-            return null;
-        }
-
+    // Obtener IngredienteXReceta por el nombre de la receta
+    public Optional<List<IngredienteXReceta>> getIngredienteXRecetaByNombreReceta(String receta) {
+        return repoReceta.findByNombre(receta)
+                .map(repoIngredienteXReceta::findByReceta)
+                .orElse(Optional.empty());
     }
 
+    // Obtener todas las recetas que contienen un ingrediente específico
     public Optional<List<Receta>> getRecetasByIngrediente(String ingrediente) {
-        Ingrediente ingredienteBuscado = repoIngrediente.findByNombre(ingrediente).orElse(null);
-        if (ingredienteBuscado != null) {
-            Optional<List<IngredienteXReceta>> lista = repoIngredienteXReceta.findByIngrediente(ingredienteBuscado);
-            if (lista.isPresent()) {
-                List<Receta> recetas = new ArrayList<>();
-                for (IngredienteXReceta ingredienteXReceta : lista.get()) {
-                    Receta receta = repoReceta.findById(ingredienteXReceta.getReceta().getId()).orElse(null);
-                    if (receta != null) {
-                        recetas.add(receta);
-                    }
-                }
-                return Optional.of(recetas);
-            }
-        }
-        return Optional.empty();
+        return repoIngrediente.findByNombre(ingrediente)
+                .map(ing -> {
+                    List<IngredienteXReceta> ingredienteXRecetas = repoIngredienteXReceta.findByIngrediente(ing).orElse(new ArrayList<>());
+                    List<Receta> recetas = new ArrayList<>();
+                    ingredienteXRecetas.forEach(ixr -> recetas.add(ixr.getReceta()));
+                    return Optional.of(recetas);
+                }).orElse(Optional.empty());
     }
 
+    // Guardar un IngredienteXReceta
     public IngredienteXReceta saveIngredienteXReceta(IngredienteXReceta ingredienteXReceta) {
         return repoIngredienteXReceta.save(ingredienteXReceta);
     }
 
+    // Eliminar un IngredienteXReceta por ID
     public void deleteIngredienteXReceta(Long id) {
         repoIngredienteXReceta.deleteById(id);
     }
-
 }
+

@@ -1,5 +1,6 @@
 package com.api.Proyecto_Recetas.Models;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,18 +21,20 @@ public class IngredienteXReceta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Ingrediente ingrediente;
-    @ManyToOne
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Receta receta;
-    private int cantidad; 
+
+    private int cantidad;
     private String unidad;
+
     public IngredienteXReceta(Ingrediente ingrediente, Receta receta, int cantidad, String unidad) {
         this.ingrediente = ingrediente;
         this.receta = receta;
         this.cantidad = cantidad;
         this.unidad = unidad;
     }
-
-
 }

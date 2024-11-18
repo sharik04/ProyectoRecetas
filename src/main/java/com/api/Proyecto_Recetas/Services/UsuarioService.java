@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.api.Proyecto_Recetas.Models.Usuario;
 import com.api.Proyecto_Recetas.Repositories.UsuarioRepository;
-
 @Service
 public class UsuarioService {
+
     @Autowired
-    UsuarioRepository userRepo;
+    private UsuarioRepository userRepo;
 
     public ArrayList<Usuario> getUsers() {
         return (ArrayList<Usuario>) userRepo.findAll();
@@ -20,7 +20,6 @@ public class UsuarioService {
 
     public Usuario saveUser(Usuario user) {
         return userRepo.save(user);
-
     }
 
     public Optional<Usuario> getUserById(Long id) {
@@ -28,11 +27,14 @@ public class UsuarioService {
     }
 
     public Usuario updateByID(Usuario request, Long id) {
-        Usuario user = userRepo.findById(id).get();
-        user.setUsername(request.getUsername());
-        user.setPassword(request.getPassword());
-
-        return user;
+        Optional<Usuario> optionalUser = userRepo.findById(id);
+        if (optionalUser.isPresent()) {
+            Usuario user = optionalUser.get();
+            user.setUsername(request.getUsername());
+            user.setPassword(request.getPassword());
+            return userRepo.save(user);  // Asegurarse de guardar los cambios
+        }
+        return null;
     }
 
     public boolean deleteUser(Long id) {
@@ -49,16 +51,14 @@ public class UsuarioService {
     }
 
     public int login(String username, String password) {
-        Usuario user = userRepo.findByEmail(username).orElse(null);
-        if (user != null){
-            if (user.getPassword().equals(password)){
-                //cast long id to int
+        Optional<Usuario> optionalUser = userRepo.findByEmail(username);
+        if (optionalUser.isPresent()) {
+            Usuario user = optionalUser.get();
+            if (user.getPassword().equals(password)) {
                 return user.getId().intValue();
-            } else {
-                return -1;
             }
         }
-        return -1;
+        return -1; // Usuario no encontrado o contraseña incorrecta
     }
-
 }
+

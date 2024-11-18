@@ -5,14 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.api.Proyecto_Recetas.Models.IngredienteXReceta;
 import com.api.Proyecto_Recetas.Models.Receta;
@@ -43,7 +36,8 @@ public class RecetaController {
 
     @GetMapping("/buscarPorNombre")
     public ResponseEntity<Receta> getRecetaByNombre(@RequestParam String nombre) {
-        Receta receta = recetaService.getRecetaByNombre(nombre);
+        System.out.println("Recibido parámetro nombre: " + nombre);
+        Receta receta = recetaService.getRecetaByNombre(nombre.trim());
         if (receta != null) {
             return ResponseEntity.ok(receta);
         } else {
@@ -55,13 +49,13 @@ public class RecetaController {
     public ResponseEntity<String> crearReceta(@RequestBody NewRecetaRequest entity) {
         if (recetaService.crearReceta(entity.getReceta(), entity.getIngredientesXReceta()) == 1) {
             return ResponseEntity.ok("Receta creada correctamente");
-        }   
+        }
         else {
             return ResponseEntity.badRequest().build();
         }
-        
+
     }
-    
+
 
     @GetMapping("/{id}")
     public Receta getReceta(@PathVariable Long id) {
@@ -83,6 +77,26 @@ public class RecetaController {
     public List<IngredienteXReceta> getMethodName() {
         return repoPrueba.getAllIngredienteXReceta();
     }
-    
+
+    @PostMapping("/toggleFavorita/{id}")
+    public ResponseEntity<Receta> toggleFavorita(@PathVariable Long id) {
+        Receta recetaActualizada = recetaService.toggleFavorita(id);
+        if (recetaActualizada != null) {
+            return ResponseEntity.ok(recetaActualizada);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    // Nuevo endpoint para editar una receta
+    @PutMapping("/editar/{id}")
+    public ResponseEntity<Receta> updateReceta(@PathVariable Long id, @RequestBody Receta receta) {
+        Receta updatedReceta = recetaService.updateRecetaById(id, receta);
+        if (updatedReceta != null) {
+            return ResponseEntity.ok(updatedReceta);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 }
